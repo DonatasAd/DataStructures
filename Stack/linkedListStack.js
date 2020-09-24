@@ -1,78 +1,38 @@
-//Node
 class Node {
-  constructor(elm) {
-    this.element = elm;
+  constructor(element) {
+    this.element = element;
     this.next = null;
   }
 }
 
-class stackUsingLL {
+class Stack {
   constructor() {
-    this.length = 0;
     this.head = null;
+    this.tail = null;
+    this.size = 0;
   }
-
-  //Push data in the stack
-  push(elm) {
-    //Create a new node
-    let node = new Node(elm);
-    let current;
-
-    //Add the new node at the top
-    current = this.head;
-    node.next = current;
-    this.head = node;
-
-    this.length++;
+  // complexity - O(1)
+  push(element) {
+    const newNode = new Node(element);
+    if (!this.head) {
+      this.head = newNode;
+      this.tail = newNode;
+    } else {
+      const tempNode = this.head;
+      this.head = newNode;
+      this.head.next = tempNode;
+    }
+    return ++this.size;
   }
-
+  // complexity - O(1)
   pop() {
-    let current = this.head;
-
-    //If there is item then remove it
-    //and make the next element as the first
-    if (current) {
-      let elm = current.element;
-      current = current.next;
-      this.head = current;
-      this.length--;
-      return elm;
+    if (!this.head) return null;
+    const tempNode = this.head;
+    if (this.head === this.tail) {
+      this.tail = null;
     }
-
-    return null;
-  }
-
-  //Return the first element in the stack
-  peek() {
-    if (this.head) {
-      return this.head.element;
-    }
-
-    return null;
-  }
-
-  //Convert the stack to an array
-  toArray() {
-    let arr = [];
-    let current = this.head;
-    while (current) {
-      arr.push(current.element);
-      current = current.next;
-    }
-
-    return arr;
-  }
-
-  isEmpty() {
-    return this.length === 0;
-  }
-
-  size() {
-    return this.length;
-  }
-
-  clear() {
-    this.head = null;
-    this.length = 0;
+    this.head = this.head.next;
+    this.size--;
+    return tempNode.element;
   }
 }
