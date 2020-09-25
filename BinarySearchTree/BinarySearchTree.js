@@ -1,114 +1,84 @@
-//Node
 class Node {
-  constructor(key) {
-    this.key = key;
+  constructor(value) {
+    this.value = value;
     this.left = null;
     this.right = null;
   }
 }
 
-//BST
 class BinarySearchTree {
   constructor() {
     this.root = null;
   }
-
-  insertNode = (node, newNode) => {
-    if (newNode.key < node.key) {
-      if (node.left === null) {
-        node.left = newNode;
-      } else {
-        this.insertNode(node.left, newNode);
-      }
-    } else {
-      if (node.right === null) {
-        node.right = newNode;
-      } else {
-        this.insertNode(node.right, newNode);
-      }
-    }
-  };
-
-  //Insert
-  insert = (key) => {
-    let newNode = new Node(key);
-
-    if (this.root == null) {
+  
+  insert(value) {
+    let newNode = new Node(value);
+    if (this.root === null) {
       this.root = newNode;
-    } else {
-      this.insertNode(this.root, newNode);
+      return this;
     }
-  };
-
-  //Search
-  search = (key, node = this.root) => {
-    if (node === null) {
-      return false;
-    }
-
-    if (key < node.key) {
-      return this.search(key, node.left);
-    } else if (key > node.key) {
-      return this.search(key, node.right);
-    } else {
-      return true;
-    }
-  };
-
-  //Min
-  min = (node = this.root) => {
-    if (!node) return null;
-    while (node && node.left !== null) {
-      node = node.left;
-    }
-
-    return node.key;
-  };
-
-  //Max
-  max = (node = this.root) => {
-    if (!node) return null;
-    while (node && node.right !== null) {
-      node = node.right;
-    }
-
-    return node.key;
-  };
-
-  //Remove
-  remove = (key) => {
-    this.root = this.removeNode(this.root, key);
-  };
-
-  removeNode = (node, key) => {
-    if (node === null) {
-      return null;
-    }
-
-    if (key < node.key) {
-      node.left = this.removeNode(node.left, key);
-      return node;
-    } else if (key > node.key) {
-      node.right = this.removeNode(node.right, key);
-      return node;
-    } else {
-      if (node.left === null && node.right === null) {
-        node = null;
-        return node;
+    let current = this.root;
+    while (true) {
+      if (value === current.value) return undefined;
+      if (value < current.value) {
+        if (current.left === null) {
+          current.left = newNode;
+          return this;
+        }
+        current = current.left;
+      } else {
+        if (current.right === null) {
+          current.right = newNode;
+          return this;
+        }
+        current = current.right;
       }
-
-      if (node.left === null) {
-        node = node.right;
-        return node;
-      } else if (node.right === null) {
-        node = node.left;
-        return node;
-      }
-
-      let aux = this.min(node.right);
-      node.key = aux.key;
-      node.right = this.removeNode(node.right, aux.key);
-      return node;
     }
-  };
+  }
+
+  find(value) {
+    if (this.root === null) return false;
+    let current = this.root,
+      found = false;
+    while (current && !found) {
+      if (value < current.value) {
+        current = current.left;
+      } else if (value > current.value) {
+        current = current.right;
+      } else {
+        found = true;
+      }
+    }
+    if (!found) return undefined;
+    return current;
+  }
+
+  contains(value) {
+    if (this.root === null) return false;
+    let current = this.root,
+      found = false;
+    while (current && !found) {
+      if (value < current.value) {
+        current = current.left;
+      } else if (value > current.value) {
+        current = current.right;
+      } else {
+        return true;
+      }
+    }
+    return false;
+  }
 }
+
+//      10
+//   5     13
+// 2  7  11  16
+
+let tree = new BinarySearchTree();
+tree.insert(10);
+tree.insert(5);
+tree.insert(13);
+tree.insert(11);
+tree.insert(2);
+tree.insert(16);
+tree.insert(7);
